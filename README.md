@@ -7,7 +7,7 @@ Change the model and controller accordingly.
 2. Run <nobr>`docker build --tag "name_for_image"`</nobr> to build an image using the Dockerfile
 3. Create a K8s namespace using the `ns.yaml` file
 4. Create pods for DB by applying the config files in`/k8s/db` using `kubectl apply -f .`
-5. Make sure pods are running using <nobr>`kubectl get pods -ns <namespace_name>`</nobr>
+5. Make sure pods are running using <nobr>`kubectl get pods -n <namespace_name>`</nobr>
 6. Create application pods for the go-server by applying the config files in `/k8s/apps` using <nobr>`kubectl apply -f .`</nobr>
 7. Access the endpoints mentioned in the controller at port 30004 (unless you changed the ports)
 
