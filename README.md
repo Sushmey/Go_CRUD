@@ -1,31 +1,15 @@
-Run a `Docker pull postgres:17.5` to pull the docker image of the postgres version you want.
-
-Run `docker run --name go_backend_db -e POSTGRES_PASSWORD=password -d postgres:17.5` to whip up the postgres container. Make sure to add the version in postgres else it will download the most recent version.
-
-
-Use `docker container start <name_of_container>` to start an already existing container.
-
-Just connected to the postgresql server inside the connected from the outside. Connection details should be the exposed ones and not of the docker container.
-
-In my case 
-
-- Host address -> localhost
-- port -> 8001 (or  whatever mentioned, if not mentioned should be 5432. If that fails create another container and explictly mention a port)
-- username -> postgres (or whatever used to create)
-- password -> ! (password for db)
-
-
 ## What is this project? 
 A GoLang backend which is a CRUD API for inventory management. Could be a library inventory management, a to-do list, or even a bug-tracker. 
 Change the model and controller accordingly.
 
-## Implement interfaces in Golang
-Interfaces are implemented implictly without any keyword. To implement an interface, you need to define all the functions of it.
-
 ## Steps
-- Initalized a go.mod file by running `go mod init <name_of_module>`
-- Import gorilla mux for routing
-- Import gorm and gorm postgres driver (gorm is Go ORM)
+1. Clone the repository
+2. Run `docker build --tag "name_for_image"` to build an image using the Dockerfile
+3. Create a K8s namespace using the `ns.yaml` file
+4. Create pods for DB by applying the config files in`/k8s/db` using `kubectl apply -f .`
+5. Make sure pods are running using `kubectl get pods -ns <namespace_name>`
+6. Create application pods for the go-server by applying the config files in `/k8s/apps` using `kubectl apply -f .`
+7. Access the endpoints mentioned in the controller at port 30004 (unless you changed the ports)
 
 # DOCKER
 A `Dockerfile` is needed to build a docker container, you can also use it to create a multistage deployment. 
@@ -73,7 +57,10 @@ To make two containers interact with each other in docker, they need to be in th
 - Create a `cm.yaml`. This ConfigMap is to store key-value pair of config data for k8s, allows to separate config from application code making it easier to make changes.
 - Create a `svc.yaml` and `deploy.yaml` to create the service and deploy it. In our case its a db so do mention the db config like port, username, dbname, host and password.
 
-
+### Create the application and connect to DB
+- Set up ConfigMap and add env variables to connect to postgres-service we created earlier
+- Set up deployment where we create a container using the image created earlier (in step 2) and mention the port which exposes this container
+- Create a service file to expose the deployed container to the outside world. In our case we have exposed 8080 (on container) to 30004 in outside world
 
 ## Common Errors I ran into while developing this
 - ### Connection refused
