@@ -68,11 +68,14 @@ To make two containers interact with each other in docker, they need to be in th
 - ### K8s pod fails immediately with exit code 1
     Meaning the internal application fails. 
     Try running `kubectl logs <pod_name> -n <namespace_name>` to see the logs. 
+
     Error was that db we are connecting is uninitialized so added the env tag to initialize the port.
+```
      containers:
             - name: postgres-db
               image: postgres:17.5
               env:
                 - name: POSTGRES_PASSWORD
-                  value: !
+                  value: <insert password without quotes>
               ports:
+```
